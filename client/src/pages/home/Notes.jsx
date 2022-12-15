@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import { connect } from "react-redux";
-import { getAllNotes } from "../../redux/actions/noteAction";
+import { bindActionCreators } from "redux";
+import { getAllNotes, deleteNote } from "../../redux/actions/noteAction";
 const Notes = (props) => {
   useEffect(() => {
     props.getAllNotes();
-  }, []);
-  console.log(props.notes.notes);
+  }, [props.notes]);
   return (
     <div className="grid w-full grid-cols-3 gap-4 py-10 justify-items-center">
       {props.notes.notes.map((note) => (
@@ -14,7 +14,10 @@ const Notes = (props) => {
           key={note._id}
           className="relative max-w-sm p-6 pr-16 bg-gray-800 border border-gray-700 rounded-lg shadow-md"
         >
-          <button className="absolute text-2xl text-white right-2 top-8">
+          <button
+            className="absolute text-2xl text-white right-2 top-8"
+            onClick={() => props.dispatch(deleteNote(note._id)())}
+          >
             <RiDeleteBin7Fill />
           </button>
           <a href="#">
@@ -37,8 +40,10 @@ const Notes = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, dispatch) => ({
   notes: state.notes,
+  actions: {
+    handleDelete: bindActionCreators(deleteNote, dispatch),
+  },
 });
-
-export default connect(mapStateToProps, { getAllNotes })(Notes);
+export default connect(mapStateToProps, { getAllNotes, deleteNote })(Notes);
