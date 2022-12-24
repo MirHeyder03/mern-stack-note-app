@@ -4,11 +4,12 @@ import {
   CREATE_NOTE,
   GET_NOTE,
   DELETE_NOTE,
+  UPDATE_NOTE,
 } from "./noteActionTypes";
 //! get all notes
 export const getAllNotes = () => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/v1/notes`);
+    const response = await axios.get(`/api/v1/notes`);
     dispatch({
       type: GET_ALL_NOTES,
       payload: response.data,
@@ -16,19 +17,21 @@ export const getAllNotes = () => async (dispatch) => {
   } catch (error) {}
 };
 //! create a note
-export const createNote = () => async (dispatch) => {
+export const createNote = (note) => async (dispatch) => {
   try {
-    const response = await axios.post(`http://localhost:5000/api/v1/notes`);
+    const response = await axios.post(`/api/v1/notes`, note);
     dispatch({
       type: CREATE_NOTE,
-      payload: "",
+      payload: response.data,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error.response.data.error);
+  }
 };
 //! get the note
-export const getNote = () => async (dispatch) => {
+export const getNote = (id) => async (dispatch) => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/v1/notes`);
+    const response = await axios.get(`/api/v1/notes/${id}`);
     dispatch({
       type: GET_NOTE,
       payload: response.data,
@@ -37,14 +40,20 @@ export const getNote = () => async (dispatch) => {
 };
 //! delete Note
 export const deleteNote = (id) => async (dispatch) => {
-  console.log(id);
   try {
-    const response = await axios.delete(
-      `http://localhost:5000/api/v1/notes/${id}`
-    );
+    await axios.delete(`/api/v1/notes/${id}`);
     dispatch({
       type: DELETE_NOTE,
-      payload: response.data,
+      payload: id,
+    });
+  } catch (error) {}
+};
+//! update Note
+export const updateNote = (id, note) => async (dispatch) => {
+  try {
+    const response = await axios.patch(`/api/v1/notes/${id}`, note);
+    dispatch({
+      type: UPDATE_NOTE,
     });
   } catch (error) {}
 };

@@ -3,20 +3,33 @@ import {
   CREATE_NOTE,
   GET_NOTE,
   DELETE_NOTE,
+  UPDATE_NOTE,
 } from "../actions/noteActionTypes.js";
 
-const initialState = {
+const notesState = {
   notes: [],
+  note: {},
+  error: "",
 };
 
-const noteReducer = (state = initialState, action) => {
+const noteReducer = (state = notesState, action) => {
   switch (action.type) {
     case GET_ALL_NOTES:
-      return { ...state, notes: action.payload };
+      return { notes: action.payload };
     case DELETE_NOTE:
       return {
-        ...state,
-        notes: state.filter((id) => id != action.payload._id),
+        notes: state.notes.filter((note) => note._id !== action.payload),
+      };
+    case CREATE_NOTE:
+      return {
+        notes: [action.payload, ...state.notes],
+        error: action.payload.error,
+      };
+    case UPDATE_NOTE:
+      return { note: [action.payload, ...state.note] };
+    case GET_NOTE:
+      return {
+        note: action.payload,
       };
     default:
       return state;
