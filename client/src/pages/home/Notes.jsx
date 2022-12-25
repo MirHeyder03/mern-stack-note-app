@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { getAllNotes, deleteNote } from "../../redux/actions/noteAction";
 const Notes = () => {
+  const auth = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const { notes } = useSelector((state) => state.notes);
   useEffect(() => {
     dispatch(getAllNotes());
-  }, []);
+  }, [localStorage.getItem("auth")]);
   return (
     <div className="grid w-full grid-cols-3 gap-4 py-10 justify-items-center">
       {notes &&

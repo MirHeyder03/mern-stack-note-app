@@ -6,10 +6,17 @@ import {
   DELETE_NOTE,
   UPDATE_NOTE,
 } from "./noteActionTypes";
+
 //! get all notes
 export const getAllNotes = () => async (dispatch) => {
   try {
-    const response = await axios.get(`/api/v1/notes`);
+    const response = await axios.get(`/api/v1/notes`, {
+      headers: {
+        Authorization: `Bearer ${
+          JSON.parse(localStorage.getItem("auth")).token
+        }`,
+      },
+    });
     dispatch({
       type: GET_ALL_NOTES,
       payload: response.data,
@@ -19,7 +26,13 @@ export const getAllNotes = () => async (dispatch) => {
 //! create a note
 export const createNote = (note) => async (dispatch) => {
   try {
-    const response = await axios.post(`/api/v1/notes`, note);
+    const response = await axios.post(`/api/v1/notes`, note, {
+      headers: {
+        Authorization: `Bearer ${
+          JSON.parse(localStorage.getItem("auth")).token
+        }`,
+      },
+    });
     dispatch({
       type: CREATE_NOTE,
       payload: response.data,
@@ -31,7 +44,13 @@ export const createNote = (note) => async (dispatch) => {
 //! get the note
 export const getNote = (id) => async (dispatch) => {
   try {
-    const response = await axios.get(`/api/v1/notes/${id}`);
+    const response = await axios.get(`/api/v1/notes/${id}`, {
+      headers: {
+        Authorization: `Bearer ${
+          JSON.parse(localStorage.getItem("auth")).token
+        }`,
+      },
+    });
     dispatch({
       type: GET_NOTE,
       payload: response.data,
@@ -41,7 +60,13 @@ export const getNote = (id) => async (dispatch) => {
 //! delete Note
 export const deleteNote = (id) => async (dispatch) => {
   try {
-    await axios.delete(`/api/v1/notes/${id}`);
+    await axios.delete(`/api/v1/notes/${id}`, {
+      headers: {
+        Authorization: `Bearer ${
+          JSON.parse(localStorage.getItem("auth")).token
+        }`,
+      },
+    });
     dispatch({
       type: DELETE_NOTE,
       payload: id,
@@ -51,7 +76,13 @@ export const deleteNote = (id) => async (dispatch) => {
 //! update Note
 export const updateNote = (id, note) => async (dispatch) => {
   try {
-    const response = await axios.patch(`/api/v1/notes/${id}`, note);
+    await axios.patch(`/api/v1/notes/${id}`, note, {
+      headers: {
+        Authorization: `Bearer ${
+          JSON.parse(localStorage.getItem("auth")).token
+        }`,
+      },
+    });
     dispatch({
       type: UPDATE_NOTE,
     });
