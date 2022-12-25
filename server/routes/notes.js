@@ -7,7 +7,9 @@ import {
   updateNote,
   deleteNote,
 } from "../controllers/notes.js";
+import auth from "../middlewares/auth.js";
 
+router.use(auth);
 router.get("/", getAllNotes);
 router.get("/:id", getNote);
 router.post("/", createNote);

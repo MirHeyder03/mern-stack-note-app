@@ -4,7 +4,8 @@ import Note from "../models/notes.js";
 const createNote = async (req, res) => {
   const { title, desc } = req.body;
   try {
-    const note = await Note.create({ title, desc });
+    const userId = req.user._id;
+    const note = await Note.create({ title, desc, userId });
     res.status(200).json(note);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -12,10 +13,11 @@ const createNote = async (req, res) => {
 };
 //! get all notes
 const getAllNotes = async (req, res) => {
-  const notes = await Note.find({}).sort({ createdAt: -1 });
+  const userId = req.user._id;
+  const notes = await Note.find({ userId }).sort({ createdAt: -1 });
   res.status(200).json(notes);
 };
-//get  the note
+//! get  the note
 const getNote = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
